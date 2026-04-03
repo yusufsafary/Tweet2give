@@ -1,0 +1,60 @@
+name: Deploy Smart Contract
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: 'Target network'
+        required: true
+        type: choice
+        options:
+          - base-sepolia
+          - base
+      run_seed:
+        description: 'Run seed script after deploy?'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy-contract:
+    name: Deploy Tweet2Give Contract
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.network == 'base' && 'production' || 'testnet' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Deploy to ${{ github.event.inputs.network }}
+        run: npx hardhat run scripts/deploy.js --network ${{ github.event.inputs.network }}
+        env:
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+          FEE_RECIPIENT: ${{ secrets.FEE_RECIPIENT }}
+          INITIAL_FEE_BPS: 0
+          BASESCAN_API_KEY: ${{ secrets.BASESCAN_API_KEY }}
+
+      - name: Seed demo creators
+        if: github.event.inputs.run_seed == 'true'
+        run: npx hardhat run scripts/seed.js --network ${{ github.event.inputs.network }}
+        env:
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.DEPLOYER_PRIVATE_KEY }}
+
+      - name: Upload deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-${{ github.event.inputs.network }}-${{ github.run_number }}
+          path: deployments/
+          retention-days: 90

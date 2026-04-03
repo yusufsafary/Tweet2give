@@ -1,0 +1,40 @@
+{
+  "name": "tweet2give",
+  "version": "1.0.0",
+  "description": "Tweet2Give — Fund Creators Who Matter. Decentralized crowdfunding via X (@bankrbot) on Base.",
+  "private": true,
+  "scripts": {
+    "build": "npm run compile && npm run copy-frontend",
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "test:coverage": "npx hardhat coverage",
+    "deploy:testnet": "npx hardhat run scripts/deploy.js --network base-sepolia",
+    "deploy:mainnet": "npx hardhat run scripts/deploy.js --network base",
+    "deploy:local": "npx hardhat run scripts/deploy.js --network localhost",
+    "seed:testnet": "npx hardhat run scripts/seed.js --network base-sepolia",
+    "verify:testnet": "npx hardhat verify --network base-sepolia",
+    "verify:mainnet": "npx hardhat verify --network base",
+    "node:local": "npx hardhat node",
+    "lint:sol": "npx solhint 'contracts/**/*.sol'",
+    "size": "npx hardhat size-contracts",
+    "gas": "REPORT_GAS=true npx hardhat test",
+    "copy-frontend": "node -e \"const fs=require('fs');if(!fs.existsSync('frontend'))fs.mkdirSync('frontend');fs.copyFileSync('../attached_assets/Pasted--DOCTYPE-html-html-lang-en-head-meta-charset-UTF-8-meta_1775182062132.txt','frontend/index.html');console.log('Frontend copied');\""
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.4"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.11",
+    "chai": "^4.5.0",
+    "hardhat": "^2.22.15",
+    "hardhat-contract-sizer": "^2.10.0",
+    "hardhat-gas-reporter": "^1.0.10",
+    "solhint": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

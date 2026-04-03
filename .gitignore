@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Hardhat
+cache/
+artifacts/
+typechain/
+typechain-types/
+
+# Deployment outputs (commit if you want to track deploys)
+# deployments/
+
+# Coverage
+coverage/
+coverage.json
+
+# Build
+dist/
+build/
+frontend/
+
+# Vercel
+.vercel
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Yarn
+yarn.lock
